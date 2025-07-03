@@ -1,0 +1,44 @@
+{
+  "name": "@azfar_razzaq/react-infinite-carousel",
+  "version": "1.0.0",
+  "description": "This package provides a react component to render an infinite carousel",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Azfar731/react-infinite-carousel-package.git"
+  },
+  "keywords": [
+    "react",
+    "carousel",
+    "front-end"
+  ],
+  "author": "Azfar Razzaq",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Azfar731/react-infinite-carousel-package/issues"
+  },
+  "homepage": "https://github.com/Azfar731/react-infinite-carousel-package#readme",
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.6.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "rollup-plugin-dts": "^6.2.1",
+    "typescript": "^5.8.3",
+    "vite": "^7.0.0",
+    "vite-plugin-css-injected-by-js": "^3.5.2"
+  },
+  "peerDependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  }
+}
