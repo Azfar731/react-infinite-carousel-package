@@ -4,7 +4,7 @@
   "description": "This package provides a react component to render an infinite carousel",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
+  "types": "dist/Carousel.d.ts",
   "files": [
     "dist",
     "README.md"
