@@ -7,14 +7,16 @@
 }
 
 .marquee {
-  animation: marquee 20s linear infinite; /* Replace with your desired speed and direction */
-  /* padding-top: 1.5rem; 
-  padding-bottom: 1.5rem; */
+  animation-name: marquee;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+
+  /* new line: makes animation speed change smoothly */
+  transition: animation-duration 0.5s ease;
   display: flex;
   white-space: nowrap;
   flex-shrink: 0;
 }
-
 
 .carousel-item {
   height: 3rem; /* h-12 */

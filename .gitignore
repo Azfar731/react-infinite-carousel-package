@@ -27,6 +27,8 @@ Thumbs.db
 .env
 .env.*
 
+
+
 # Misc
 *.log
 
@@ -38,3 +40,4 @@ coverage/
 
 # Others
 *.tgz
+todo.md
