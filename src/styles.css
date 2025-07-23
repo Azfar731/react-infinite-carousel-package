@@ -1,37 +1,22 @@
 .carousel-container {
   width: 100%;
-  /* margin-top: 3rem;  */
   position: relative;
   display: flex;
   overflow-x: hidden;
 }
 
+/* Core marquee: one canonical animation driven by --marquee-duration */
 .marquee {
-  animation-name: marquee;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-
-  /* new line: makes animation speed change smoothly */
-  transition: animation-duration 0.5s ease;
+  --marquee-duration: 20s;
+  animation: marquee var(--marquee-duration) linear infinite;
+  animation-direction: normal;
   display: flex;
   white-space: nowrap;
   flex-shrink: 0;
 }
 
-.carousel-item {
-  height: 3rem; /* h-12 */
-  width: 3rem; /* w-12 */
-  border-radius: 9999px; /* rounded-full */
-  background-color: #e5e7eb; /* bg-gray-200 */
-  margin-left: 1rem; /* mx-4 */
-  margin-right: 1rem;
-}
-
-.text-style {
-  font-size: 4rem; /* text-base */
-  font-weight: 500; /* font-medium */
-  color: white; /* text-gray-700 */
-  margin-left: 0.5rem; /* ml-2 */
+.marquee--rtl {
+  animation-direction: reverse;
 }
 
 @keyframes marquee {
@@ -41,8 +26,4 @@
   100% {
     transform: translateX(-100%);
   }
-}
-
-.animate-marquee {
-  animation: marquee 20s linear infinite;
 }
