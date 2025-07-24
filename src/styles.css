@@ -3,6 +3,8 @@
   position: relative;
   display: flex;
   overflow-x: hidden;
+  /* white-space: nowrap;
+  font-size: 0; */
 }
 
 /* Core marquee: one canonical animation driven by --marquee-duration */
@@ -12,7 +14,10 @@
   animation-direction: normal;
   display: flex;
   white-space: nowrap;
+  /* display: inline-flex;
+  white-space: nowrap; */
   flex-shrink: 0;
+  /* display: inline-block; */
 }
 
 .marquee--rtl {
