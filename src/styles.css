@@ -1,34 +1,39 @@
+/* ───────────── outer wrapper (unchanged) ─────────────── */
 .carousel-container {
   width: 100%;
   position: relative;
-  display: flex;
   overflow-x: hidden;
-  /* white-space: nowrap;
-  font-size: 0; */
 }
 
-/* Core marquee: one canonical animation driven by --marquee-duration */
-.marquee {
-  --marquee-duration: 20s;
-  animation: marquee var(--marquee-duration) linear infinite;
-  animation-direction: normal;
-  display: flex;
+/* ───────────── animated track  ───────────────────────── */
+.track {
+  /* shrink-wrap to content */
+  display: inline-flex;
+  flex: 0 0 auto;
+  width: max-content;
   white-space: nowrap;
-  /* display: inline-flex;
-  white-space: nowrap; */
-  flex-shrink: 0;
-  /* display: inline-block; */
-}
 
-.marquee--rtl {
+  animation: scroll var(--marquee-duration, 20s) linear infinite;
+}
+.track--rtl {
   animation-direction: reverse;
 }
 
-@keyframes marquee {
-  0% {
-    transform: translateX(0%);
+/* Keyframes: slide left by exactly ONE lane-set; because the list is
+   duplicated inside .track, its total width = 2× first-set width, so
+   -50 % == -1 × first-set width == seamless loop                  */
+@keyframes scroll {
+  from {
+    transform: translateX(0);
   }
-  100% {
-    transform: translateX(-100%);
+  to {
+    transform: translateX(-50%);
   }
+}
+
+/* ───────────── one lane (previously “.marquee”) ─────── */
+.marquee-lane {
+  display: inline-flex;
+  flex: 0 0 auto;
+  white-space: nowrap;
 }

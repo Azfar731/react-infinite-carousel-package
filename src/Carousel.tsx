@@ -1,11 +1,5 @@
 // Carousel.tsx
-import React, {
-  useRef,
-  useEffect,
-  useLayoutEffect,
-  useState,
-  MutableRefObject,
-} from "react";
+import React, { useRef, useLayoutEffect, useState, useEffect } from "react";
 import "./styles.css";
 
 interface BaseCarouselProps {
@@ -29,8 +23,9 @@ interface TextCarouselProps extends BaseCarouselProps {
 
 type CarouselProps = ImageCarouselProps | TextCarouselProps;
 
+/* helper for responsive clone rules -------------------------------------- */
 const chooseClonesFromBreakpoints = (
-  rules: { breakpoint: number; num_of_copies: number }[],
+  rules: { breakpoint: number; num_of_copies: number }[] = [],
   vw: number
 ) => {
   const sorted = [...rules].sort((a, b) => a.breakpoint - b.breakpoint);
@@ -48,45 +43,34 @@ export default function Carousel(params: CarouselProps) {
     className,
   } = params;
 
-  const marqueeRefs = useRef<HTMLDivElement[]>([]) as MutableRefObject<
-    HTMLDivElement[]
-  >;
-  const addRef = (el: HTMLDivElement | null) => {
-    if (el && !marqueeRefs.current.includes(el)) marqueeRefs.current.push(el);
-  };
-
-  const firstLaneRef = useRef<HTMLDivElement | null>(null);
+  /* ───────────────────────── refs ───────────────────────── */
+  const trackRef = useRef<HTMLDivElement | null>(null); // animated wrapper
+  const firstLaneRef = useRef<HTMLDivElement | null>(null); // first clone
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  const [hovered, setHovered] = useState(false);
-
-  const ssrSafeWindowWidth =
-    typeof window === "undefined" ? 1024 : window.innerWidth;
-
-  /** Initial guess so SSR/hydration doesn’t break layout */
+  /* ───────────────── clone count (same logic as before) ─── */
+  const ssrSafeVW = typeof window === "undefined" ? 1024 : window.innerWidth;
   const [clonesCount, setClonesCount] = useState<number>(() => {
-    const fromBp = responsiveClones
-      ? chooseClonesFromBreakpoints(responsiveClones, ssrSafeWindowWidth)
-      : undefined;
-    return fromBp ?? numOfCopies ?? 2;
+    const fromBP = chooseClonesFromBreakpoints(responsiveClones, ssrSafeVW);
+    return fromBP ?? numOfCopies ?? 10;
   });
 
+  /* responsive break-point logic (unchanged) */
   useEffect(() => {
     if (!responsiveClones?.length) return;
-
-    const handleResize = () => {
-      const fromBp = chooseClonesFromBreakpoints(
+    const handle = () => {
+      const fromBP = chooseClonesFromBreakpoints(
         responsiveClones,
         window.innerWidth
       );
-      if (fromBp && fromBp !== clonesCount) setClonesCount(fromBp);
+      if (fromBP && fromBP !== clonesCount) setClonesCount(fromBP);
     };
-    handleResize(); // run once on mount
-    window.addEventListener("resize", handleResize, { passive: true });
-    return () => window.removeEventListener("resize", handleResize);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    handle();
+    window.addEventListener("resize", handle, { passive: true });
+    return () => window.removeEventListener("resize", handle);
   }, [responsiveClones, clonesCount]);
 
+  /* auto-calculate copies when numOfCopies NOT supplied */
   const autoCalcRequired =
     !responsiveClones?.length && typeof numOfCopies !== "number";
 
@@ -97,61 +81,44 @@ export default function Carousel(params: CarouselProps) {
     const calc = () => {
       const containerW = containerRef.current!.offsetWidth;
       const laneW = firstLaneRef.current!.scrollWidth;
-      if (laneW === 0) return; // images may not have loaded yet
+      if (laneW === 0) return; // images may still be loading
       const needed = Math.max(2, Math.ceil(containerW / laneW) + 1);
       if (needed !== clonesCount) setClonesCount(needed);
     };
-
     calc();
-
     const ro = new ResizeObserver(calc);
     ro.observe(containerRef.current);
     return () => ro.disconnect();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoCalcRequired, clonesCount]);
 
-  useEffect(() => {
-    marqueeRefs.current.forEach((el) => {
-      const anim = el.getAnimations()[0];
-      if (!anim) return;
+  /* ───────────────── hover speed / pause ───────────────── */
+  const [hovered, setHovered] = useState(false);
 
-      if (hovered) {
-        if (hoverSpeedFactor === 0) anim.pause();
-        else {
-          anim.playbackRate = hoverSpeedFactor;
-          anim.play();
-        }
-      } else {
-        anim.playbackRate = 1;
+  useEffect(() => {
+    const anim = trackRef.current?.getAnimations()[0];
+    if (!anim) return;
+    if (hovered) {
+      if (hoverSpeedFactor === 0) anim.pause();
+      else {
+        anim.playbackRate = hoverSpeedFactor;
         anim.play();
       }
-    });
+    } else {
+      anim.playbackRate = 1;
+      anim.play();
+    }
   }, [hovered, hoverSpeedFactor]);
 
-  const dirClass = animationDirection === "rtl" ? "marquee--rtl" : "";
-
-  const renderMarquee = (copyIdx: number, attachFirstRef?: boolean) => (
+  /* ───────────────── rendering helpers ─────────────────── */
+  const createLane = (copyIdx: number, attachRef?: boolean) => (
     <div
-      key={`marquee-${copyIdx}`}
-      ref={(el) => {
-        addRef(el);
-        if (attachFirstRef) firstLaneRef.current = el;
-      }}
-      className={`marquee ${dirClass}`}
-      style={
-        { "--marquee-duration": `${animationDuration}s` } as React.CSSProperties
-      }
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
+      key={`lane-${copyIdx}`}
+      ref={attachRef ? firstLaneRef : undefined}
+      className="marquee-lane"
     >
       {params.itemType === "images" ? (
         params.images_links.map((link, i) => (
-          <img
-            key={`img-${copyIdx}-${i}`}
-            src={link}
-            className={className}
-            alt=""
-          />
+          <img key={`img-${copyIdx}-${i}`} src={link} className={className} />
         ))
       ) : (
         <span className={className}>{params.text}</span>
@@ -159,9 +126,31 @@ export default function Carousel(params: CarouselProps) {
     </div>
   );
 
+  /* build the first set of clones, then output it twice inside the track */
+  const lanes = Array.from({ length: clonesCount }, (_, i) =>
+    createLane(i, i === 0)
+  );
+
+  const dirClass = animationDirection === "rtl" ? "track--rtl" : "";
+
   return (
     <div ref={containerRef} className="carousel-container">
-      {Array.from({ length: clonesCount }, (_, i) => renderMarquee(i, i === 0))}
+      <div
+        ref={trackRef}
+        className={`track ${dirClass}`}
+        style={
+          {
+            "--marquee-duration": `${animationDuration}s`,
+          } as React.CSSProperties
+        }
+        onMouseEnter={() => setHovered(true)}
+        onMouseLeave={() => setHovered(false)}
+        /* key forces a clean remount when count changes → restart animation */
+        key={clonesCount}
+      >
+        {lanes}
+        {lanes}
+      </div>
     </div>
   );
 }
