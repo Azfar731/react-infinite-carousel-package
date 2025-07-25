@@ -5,6 +5,7 @@ A customizable, responsive infinite carousel component for React applications. T
 ![image-carousel](./gifs/chrome_fl684oHIqw.gif)
 
 ![text-carousel](./gifs/chrome_tk1hC98pST.gif)
+
 ## Features
 
 - 🔄 Smooth infinite scrolling animation
@@ -13,6 +14,7 @@ A customizable, responsive infinite carousel component for React applications. T
 - ⚡ Auto-calculation of required clones to fill the viewport
 - 🎮 Customizable animation speed and direction
 - 🖱️ Interactive hover effects (speed up, slow down, or pause)
+- 🌫️ Optional fade effect at the edges
 - 📐 Flexible styling options
 - 📦 TypeScript support with full type definitions
 
@@ -68,9 +70,9 @@ import Carousel from "@azfar_razzaq/react-infinite-carousel";
 
 function App() {
   const responsiveConfig = [
-    { breakpoint: 480, num_of_copies: 4 }, // up to 480px
-    { breakpoint: 768, num_of_copies: 3 }, // 481-768px
-    { breakpoint: 1024, num_of_copies: 2 }, // 769-1024px
+    { breakpoint: 480, numOfCopies: 4 }, // up to 480px
+    { breakpoint: 768, numOfCopies: 3 }, // 481-768px
+    { breakpoint: 1024, numOfCopies: 2 }, // 769-1024px
   ];
 
   return (
@@ -78,6 +80,7 @@ function App() {
       itemType="images"
       images_links={images}
       responsiveClones={responsiveConfig}
+      fade={50} // 50px fade effect at both edges
     />
   );
 }
@@ -89,15 +92,16 @@ function App() {
 
 These props are available for both image and text carousels:
 
-| Prop                 | Type                                                   | Default     | Description                                                     |
-| -------------------- | ------------------------------------------------------ | ----------- | --------------------------------------------------------------- |
-| `itemType`           | `"images" \| "text"`                                   | Required    | Specifies whether the carousel displays images or text          |
-| `className`          | `string`                                               | `undefined` | Additional CSS class for styling carousel items                 |
-| `num_of_copies`      | `number`                                               | `2`         | Static number of copies to display (overrides auto-calculation) |
-| `animationDuration`  | `number`                                               | `20`        | Duration of one complete animation cycle in seconds             |
-| `animationDirection` | `"ltr" \| "rtl"`                                       | `"ltr"`     | Direction of animation (left-to-right or right-to-left)         |
-| `hoverSpeedFactor`   | `number`                                               | `1`         | Speed multiplier on hover (0 = pause, <1 = slower, >1 = faster) |
-| `responsiveClones`   | `Array<{ breakpoint: number, num_of_copies: number }>` | `undefined` | Responsive configuration for different screen sizes             |
+| Prop                 | Type                                                   | Default     | Description                                                                                                               |
+| -------------------- | ------------------------------------------------------ | ----------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `itemType`           | `"images" \| "text"`                                   | Required    | Specifies whether the carousel displays images or text                                                                    |
+| `className`          | `string`                                               | `undefined` | Additional CSS class for styling carousel items                                                                           |
+| `numOfCopies`        | `number`                                               | `2`         | Base number of copies to display. The actual number of clones will be doubled (e.g., if set to 3, total clones will be 6) |
+| `animationDuration`  | `number`                                               | `20`        | Duration of one complete animation cycle in seconds                                                                       |
+| `animationDirection` | `"ltr" \| "rtl"`                                       | `"ltr"`     | Direction of animation (left-to-right or right-to-left)                                                                   |
+| `hoverSpeedFactor`   | `number`                                               | `1`         | Speed multiplier on hover (0 = pause, <1 = slower, >1 = faster)                                                           |
+| `responsiveClones`   | `Array<{ breakpoint: number, numOfCopies: number }>` | `undefined` | Responsive configuration for different screen sizes. Note: The numOfCopies value is doubled for each breakpoint         |
+| `fade`               | `number`                                               | `undefined` | Width in pixels for the fade effect at the edges. Creates a gradient fade at both ends of the carousel                    |
 
 ### Image Carousel Props
 
@@ -122,11 +126,11 @@ By default, the carousel automatically adjusts the number of clones based on the
 However, if you need more control over the responsive behavior, you can use the `responsiveClones` prop. This prop accepts an array of breakpoint configurations, where each configuration object has two properties:
 
 - `breakpoint`: The maximum width in pixels for this configuration to apply
-- `num_of_copies`: Number of copies to display at this breakpoint
+- `numOfCopies`: Base number of copies to display at this breakpoint. The actual number of clones will be doubled (e.g., if set to 3, total clones will be 6)
 
 Configurations are evaluated from smallest to largest breakpoint. The first rule whose breakpoint is greater than or equal to the current viewport width is applied.
 
-If neither `responsiveClones` nor `num_of_copies` is provided, the carousel will use its automatic calculation mode to determine the optimal number of copies needed to fill the viewport.
+If neither `responsiveClones` nor `numOfCopies` is provided, the carousel will use its automatic calculation mode to determine the optimal number of copies needed to fill the viewport.
 
 ## License
 

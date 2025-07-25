@@ -10,7 +10,7 @@ interface BaseCarouselProps {
   hoverSpeedFactor?: number;
   fade?: number;
 
-  responsiveClones?: { breakpoint: number; num_of_copies: number }[];
+  responsiveClones?: { breakpoint: number; numOfCopies: number }[];
 }
 
 interface ImageCarouselProps extends BaseCarouselProps {
@@ -27,12 +27,12 @@ type CarouselProps = ImageCarouselProps | TextCarouselProps;
 
 /* helper for responsive clone rules -------------------------------------- */
 const chooseClonesFromBreakpoints = (
-  rules: { breakpoint: number; num_of_copies: number }[] = [],
+  rules: { breakpoint: number; numOfCopies: number }[] = [],
   vw: number
 ) => {
   const sorted = [...rules].sort((a, b) => a.breakpoint - b.breakpoint);
   const match = sorted.find((r) => vw <= r.breakpoint);
-  return match?.num_of_copies;
+  return match?.numOfCopies;
 };
 
 export default function Carousel(params: CarouselProps) {
@@ -46,19 +46,17 @@ export default function Carousel(params: CarouselProps) {
     fade,
   } = params;
 
-  /* ───────────────────────── refs ───────────────────────── */
+  /*  refs  */
   const trackRef = useRef<HTMLDivElement | null>(null); // animated wrapper
   const firstLaneRef = useRef<HTMLDivElement | null>(null); // first clone
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  /* ───────────────── clone count (same logic as before) ─── */
   const ssrSafeVW = typeof window === "undefined" ? 1024 : window.innerWidth;
   const [clonesCount, setClonesCount] = useState<number>(() => {
     const fromBP = chooseClonesFromBreakpoints(responsiveClones, ssrSafeVW);
     return fromBP ?? numOfCopies ?? 10;
   });
 
-  /* responsive break-point logic (unchanged) */
   useEffect(() => {
     if (!responsiveClones?.length) return;
     const handle = () => {
@@ -94,7 +92,7 @@ export default function Carousel(params: CarouselProps) {
     return () => ro.disconnect();
   }, [autoCalcRequired, clonesCount]);
 
-  /* ───────────────── hover speed / pause ───────────────── */
+  /*  hover speed / pause  */
   const [hovered, setHovered] = useState(false);
 
   useEffect(() => {
@@ -112,7 +110,6 @@ export default function Carousel(params: CarouselProps) {
     }
   }, [hovered, hoverSpeedFactor]);
 
-  /* ───────────────── rendering helpers ─────────────────── */
   const createLane = (copyIdx: number, attachRef?: boolean) => (
     <div
       key={`lane-${copyIdx}`}
@@ -129,7 +126,6 @@ export default function Carousel(params: CarouselProps) {
     </div>
   );
 
-  /* build the first set of clones, then output it twice inside the track */
   const lanes = Array.from({ length: clonesCount }, (_, i) =>
     createLane(i, i === 0)
   );
@@ -158,7 +154,6 @@ export default function Carousel(params: CarouselProps) {
         }
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
-        /* key forces a clean remount when count changes → restart animation */
         key={clonesCount}
       >
         {lanes}

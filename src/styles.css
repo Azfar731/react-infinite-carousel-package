@@ -1,4 +1,4 @@
-/* ───────────── outer wrapper (unchanged) ─────────────── */
+
 .carousel-container {
   width: 100%;
   position: relative;
@@ -14,9 +14,7 @@
   mask-repeat: no-repeat;
 }
 
-/* ───────────── animated track  ───────────────────────── */
 .track {
-  /* shrink-wrap to content */
   display: inline-flex;
   flex: 0 0 auto;
   width: max-content;
@@ -28,9 +26,7 @@
   animation-direction: reverse;
 }
 
-/* Keyframes: slide left by exactly ONE lane-set; because the list is
-   duplicated inside .track, its total width = 2× first-set width, so
-   -50 % == -1 × first-set width == seamless loop                  */
+
 @keyframes scroll {
   from {
     transform: translateX(0);
@@ -40,7 +36,6 @@
   }
 }
 
-/* ───────────── one lane (previously “.marquee”) ─────── */
 .marquee-lane {
   display: inline-flex;
   flex: 0 0 auto;
