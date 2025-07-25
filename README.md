@@ -92,16 +92,16 @@ function App() {
 
 These props are available for both image and text carousels:
 
-| Prop                 | Type                                                   | Default     | Description                                                                                                               |
-| -------------------- | ------------------------------------------------------ | ----------- | ------------------------------------------------------------------------------------------------------------------------- |
-| `itemType`           | `"images" \| "text"`                                   | Required    | Specifies whether the carousel displays images or text                                                                    |
-| `className`          | `string`                                               | `undefined` | Additional CSS class for styling carousel items                                                                           |
-| `numOfCopies`        | `number`                                               | `2`         | Base number of copies to display. The actual number of clones will be doubled (e.g., if set to 3, total clones will be 6) |
-| `animationDuration`  | `number`                                               | `20`        | Duration of one complete animation cycle in seconds                                                                       |
-| `animationDirection` | `"ltr" \| "rtl"`                                       | `"ltr"`     | Direction of animation (left-to-right or right-to-left)                                                                   |
-| `hoverSpeedFactor`   | `number`                                               | `1`         | Speed multiplier on hover (0 = pause, <1 = slower, >1 = faster)                                                           |
-| `responsiveClones`   | `Array<{ breakpoint: number, numOfCopies: number }>` | `undefined` | Responsive configuration for different screen sizes. Note: The numOfCopies value is doubled for each breakpoint         |
-| `fade`               | `number`                                               | `undefined` | Width in pixels for the fade effect at the edges. Creates a gradient fade at both ends of the carousel                    |
+| Prop                 | Type                                                 | Default     | Description                                                                                                               |
+| -------------------- | ---------------------------------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `itemType`           | `"images" \| "text"`                                 | Required    | Specifies whether the carousel displays images or text                                                                    |
+| `className`          | `string`                                             | `undefined` | Additional CSS class for styling carousel items                                                                           |
+| `numOfCopies`        | `number`                                             | `2`         | Base number of copies to display. The actual number of clones will be doubled (e.g., if set to 3, total clones will be 6) |
+| `animationDuration`  | `number`                                             | `20`        | Duration of one complete animation cycle in seconds                                                                       |
+| `animationDirection` | `"ltr" \| "rtl"`                                     | `"ltr"`     | Direction of animation (left-to-right or right-to-left)                                                                   |
+| `hoverSpeedFactor`   | `number`                                             | `1`         | Speed multiplier on hover (0 = pause, <1 = slower, >1 = faster)                                                           |
+| `responsiveClones`   | `Array<{ breakpoint: number, numOfCopies: number }>` | `undefined` | Responsive configuration for different screen sizes. Note: The numOfCopies value is doubled for each breakpoint           |
+| `fade`               | `number`                                             | `undefined` | Width in pixels for the fade effect at the edges. Creates a gradient fade at both ends of the carousel                    |
 
 ### Image Carousel Props
 
@@ -128,7 +128,25 @@ However, if you need more control over the responsive behavior, you can use the 
 - `breakpoint`: The maximum width in pixels for this configuration to apply
 - `numOfCopies`: Base number of copies to display at this breakpoint. The actual number of clones will be doubled (e.g., if set to 3, total clones will be 6)
 
-Configurations are evaluated from smallest to largest breakpoint. The first rule whose breakpoint is greater than or equal to the current viewport width is applied.
+The carousel follows this logic to determine the number of clones:
+
+1. First, it evaluates the `responsiveClones` array from smallest to largest breakpoint.
+2. If the current viewport width is greater than all defined breakpoints, it falls back to the `numOfCopies` parameter.
+3. If `numOfCopies` is not provided, it uses automatic calculation.
+
+For example:
+
+```tsx
+const breakpoints = [
+  { breakpoint: 1024, numOfCopies: 3 }, // Applied up to 1024px
+  { breakpoint: 1200, numOfCopies: 5 }, // Applied between 1024px and 1200px
+];
+```
+
+If the viewport width is 1400px (greater than all breakpoints):
+
+- First tries to use `numOfCopies` parameter
+- If `numOfCopies` is not provided, falls back to automatic calculation
 
 If neither `responsiveClones` nor `numOfCopies` is provided, the carousel will use its automatic calculation mode to determine the optimal number of copies needed to fill the viewport.
 

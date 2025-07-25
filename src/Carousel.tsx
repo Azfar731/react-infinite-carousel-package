@@ -52,9 +52,9 @@ export default function Carousel(params: CarouselProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   const ssrSafeVW = typeof window === "undefined" ? 1024 : window.innerWidth;
+  const fromBP = chooseClonesFromBreakpoints(responsiveClones, ssrSafeVW);
   const [clonesCount, setClonesCount] = useState<number>(() => {
-    const fromBP = chooseClonesFromBreakpoints(responsiveClones, ssrSafeVW);
-    return fromBP ?? numOfCopies ?? 10;
+    return fromBP ?? numOfCopies ?? 2;
   });
 
   useEffect(() => {
@@ -72,8 +72,7 @@ export default function Carousel(params: CarouselProps) {
   }, [responsiveClones, clonesCount]);
 
   /* auto-calculate copies when numOfCopies NOT supplied */
-  const autoCalcRequired =
-    !responsiveClones?.length && typeof numOfCopies !== "number";
+  const autoCalcRequired = !fromBP && typeof numOfCopies !== "number";
 
   useLayoutEffect(() => {
     if (!autoCalcRequired) return;
