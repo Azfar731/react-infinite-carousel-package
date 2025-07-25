@@ -3,6 +3,15 @@
   width: 100%;
   position: relative;
   overflow-x: hidden;
+  mask-image: linear-gradient(
+    to right,
+    transparent 0px,
+    black var(--fade-px),
+    black calc(100% - var(--fade-px)),
+    transparent 100%
+  );
+  mask-mode: alpha;
+  mask-repeat: no-repeat;
 }
 
 /* ───────────── animated track  ───────────────────────── */

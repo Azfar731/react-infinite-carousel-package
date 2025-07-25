@@ -8,6 +8,8 @@ interface BaseCarouselProps {
   animationDuration?: number;
   animationDirection?: "ltr" | "rtl";
   hoverSpeedFactor?: number;
+  fade?: number;
+
   responsiveClones?: { breakpoint: number; num_of_copies: number }[];
 }
 
@@ -41,6 +43,7 @@ export default function Carousel(params: CarouselProps) {
     numOfCopies,
     responsiveClones,
     className,
+    fade,
   } = params;
 
   /* ───────────────────────── refs ───────────────────────── */
@@ -134,7 +137,17 @@ export default function Carousel(params: CarouselProps) {
   const dirClass = animationDirection === "rtl" ? "track--rtl" : "";
 
   return (
-    <div ref={containerRef} className="carousel-container">
+    <div
+      ref={containerRef}
+      style={
+        fade
+          ? {
+              "--fade-px": `${fade}px`,
+            }
+          : undefined
+      }
+      className="carousel-container"
+    >
       <div
         ref={trackRef}
         className={`track ${dirClass}`}
