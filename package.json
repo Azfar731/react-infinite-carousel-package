@@ -10,8 +10,8 @@
     "README.md"
   ],
   "scripts": {
-    "build": "vite build",
-    "dev": "vite build --watch",
+    "build": "vite build && tsc",
+    "dev": "vite build --watch ",
     "types": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -31,6 +31,7 @@
   },
   "homepage": "https://github.com/Azfar731/react-infinite-carousel-package#readme",
   "devDependencies": {
+    "@types/node": "^24.1.0",
     "@vitejs/plugin-react": "^4.6.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

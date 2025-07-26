@@ -5,7 +5,11 @@ import "./styles.css";
 interface BaseCarouselProps {
   className?: string;
   numOfCopies?: number;
+  /**
+   * @deprecated Use `durationPerClone` instead. This property will be removed in the next major version.
+   */
   animationDuration?: number;
+  durationPerClone?: number;
   animationDirection?: "ltr" | "rtl";
   hoverSpeedFactor?: number;
   fade?: number;
@@ -37,7 +41,8 @@ const chooseClonesFromBreakpoints = (
 
 export default function Carousel(params: CarouselProps) {
   const {
-    animationDuration = 20,
+    animationDuration,
+    durationPerClone = 5,
     animationDirection = "ltr",
     hoverSpeedFactor = 1,
     numOfCopies,
@@ -56,6 +61,10 @@ export default function Carousel(params: CarouselProps) {
   const [clonesCount, setClonesCount] = useState<number>(() => {
     return fromBP ?? numOfCopies ?? 2;
   });
+  const effectiveDuration =
+    typeof animationDuration === "number" //default value
+      ? animationDuration
+      : durationPerClone * clonesCount;
 
   useEffect(() => {
     if (!responsiveClones?.length) return;
@@ -131,6 +140,19 @@ export default function Carousel(params: CarouselProps) {
 
   const dirClass = animationDirection === "rtl" ? "track--rtl" : "";
 
+  // Warn about deprecated animationDuration
+  useEffect(() => {
+    if (
+      process.env.NODE_ENV !== "production" &&
+      animationDuration !== undefined
+    ) {
+      console.warn(
+        "[react-infinite-carousel] `animationDuration` is deprecated. " +
+          "Use `durationPerClone` for consistent speed."
+      );
+    }
+  }, [animationDuration]);
+
   return (
     <div
       ref={containerRef}
@@ -148,7 +170,7 @@ export default function Carousel(params: CarouselProps) {
         className={`track ${dirClass}`}
         style={
           {
-            "--marquee-duration": `${animationDuration}s`,
+            "--marquee-duration": `${effectiveDuration}s`,
           } as React.CSSProperties
         }
         onMouseEnter={() => setHovered(true)}

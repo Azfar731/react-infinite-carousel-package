@@ -41,7 +41,7 @@ function App() {
   ];
 
   return (
-    <Carousel itemType="images" images_links={images} animationDuration={20} />
+    <Carousel itemType="images" images_links={images} durationPerClone={10} />
   );
 }
 ```
@@ -97,7 +97,8 @@ These props are available for both image and text carousels:
 | `itemType`           | `"images" \| "text"`                                 | Required    | Specifies whether the carousel displays images or text                                                                    |
 | `className`          | `string`                                             | `undefined` | Additional CSS class for styling carousel items                                                                           |
 | `numOfCopies`        | `number`                                             | `2`         | Base number of copies to display. The actual number of clones will be doubled (e.g., if set to 3, total clones will be 6) |
-| `animationDuration`  | `number`                                             | `20`        | Duration of one complete animation cycle in seconds                                                                       |
+| `durationPerClone`   | `number`                                             | `10`        | Used for controlling animation speed. Accepts duration in seconds for each clone to complete its animation cycle. Ensures consistent speed across different screen sizes  |
+| `animationDuration`  | `number`                                             | `undefined`        | **Deprecated** (will be removed in v3.0.0). Use `durationPerClone` instead for consistent animation speed                 |
 | `animationDirection` | `"ltr" \| "rtl"`                                     | `"ltr"`     | Direction of animation (left-to-right or right-to-left)                                                                   |
 | `hoverSpeedFactor`   | `number`                                             | `1`         | Speed multiplier on hover (0 = pause, <1 = slower, >1 = faster)                                                           |
 | `responsiveClones`   | `Array<{ breakpoint: number, numOfCopies: number }>` | `undefined` | Responsive configuration for different screen sizes. Note: The numOfCopies value is doubled for each breakpoint           |
