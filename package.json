@@ -1,6 +1,6 @@
 {
   "name": "@azfar_razzaq/react-infinite-carousel",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "This package provides a react component to render an infinite carousel",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
