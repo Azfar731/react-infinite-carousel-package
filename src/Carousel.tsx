@@ -61,28 +61,43 @@ export default function Carousel(params: CarouselProps) {
   const [clonesCount, setClonesCount] = useState<number>(() => {
     return fromBP ?? numOfCopies ?? 2;
   });
+
+  /* auto-calculate copies when numOfCopies NOT supplied */
+  const [autoCalcRequired, setAutoCalcRequired] = useState(() => {
+    return !fromBP && typeof numOfCopies !== "number";
+  });
+
   const effectiveDuration =
     typeof animationDuration === "number" //default value
       ? animationDuration
       : durationPerClone * clonesCount;
 
+  //useEffect to re-calculate clonesCount when breakpoints are provided
+
   useEffect(() => {
     if (!responsiveClones?.length) return;
     const handle = () => {
-      const fromBP = chooseClonesFromBreakpoints(
+      const fromBP2 = chooseClonesFromBreakpoints(
         responsiveClones,
         window.innerWidth
       );
-      if (fromBP && fromBP !== clonesCount) setClonesCount(fromBP);
+
+      const nextCount =
+        fromBP2 ?? (typeof numOfCopies === "number" ? numOfCopies : null);
+
+      if (nextCount !== null) {
+        setAutoCalcRequired(false);
+        setClonesCount(nextCount);
+      } else {
+        setAutoCalcRequired(true);
+      }
     };
     handle();
     window.addEventListener("resize", handle, { passive: true });
     return () => window.removeEventListener("resize", handle);
-  }, [responsiveClones, clonesCount]);
+  }, [responsiveClones, numOfCopies]);
 
-  /* auto-calculate copies when numOfCopies NOT supplied */
-  const autoCalcRequired = !fromBP && typeof numOfCopies !== "number";
-
+  //for auto-calcuate logic
   useLayoutEffect(() => {
     if (!autoCalcRequired) return;
     if (!containerRef.current || !firstLaneRef.current) return;
@@ -103,6 +118,7 @@ export default function Carousel(params: CarouselProps) {
   /*  hover speed / pause  */
   const [hovered, setHovered] = useState(false);
 
+  //for adjusting hover effects
   useEffect(() => {
     const anim = trackRef.current?.getAnimations()[0];
     if (!anim) return;

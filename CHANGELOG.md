@@ -4,7 +4,6 @@ All notable changes to this project will be documented in this file.
 
 This project adheres to [Semantic Versioning](https://semver.org/).
 
-
 ## [2.0.0] - 2025-07-25
 
 ### Added
@@ -46,3 +45,10 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 ### Deprecated
 
 - Marked `animationDuration` as deprecated. It will be removed in the next major release.
+
+## [2.1.1] - 2025-07-28
+
+### Fixed
+
+- Breakpoint fallback now responds to viewport changes:
+  - Resolved an issue where the carousel did not recalculate number of clones using auto-calculation or numOfCopies, when the viewport width changed after the initial load.
