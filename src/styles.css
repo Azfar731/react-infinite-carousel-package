@@ -23,7 +23,7 @@
   animation: scroll var(--marquee-duration, 20s) linear infinite;
 }
 
-.track--rtl {
+.track--ltr {
   animation-direction: reverse;
 }
 

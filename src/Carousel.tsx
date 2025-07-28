@@ -43,7 +43,7 @@ export default function Carousel(params: CarouselProps) {
   const {
     animationDuration,
     durationPerClone = 5,
-    animationDirection = "ltr",
+    animationDirection = "rtl",
     hoverSpeedFactor = 1,
     numOfCopies,
     responsiveClones,
@@ -154,7 +154,7 @@ export default function Carousel(params: CarouselProps) {
     createLane(i, i === 0)
   );
 
-  const dirClass = animationDirection === "rtl" ? "track--rtl" : "";
+  const dirClass = animationDirection === "ltr" ? "track--ltr" : "";
 
   // Warn about deprecated animationDuration
   useEffect(() => {
