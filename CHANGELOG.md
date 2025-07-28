@@ -52,3 +52,15 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 - Breakpoint fallback now responds to viewport changes:
   - Resolved an issue where the carousel did not recalculate number of clones using auto-calculation or numOfCopies, when the viewport width changed after the initial load.
+
+## [3.0.0] - 2025-07-28
+
+### Removed
+
+- Deprecated `animationDuration` prop has been fully removed. Use `durationPerClone` to control animation speed.
+
+### Fixed
+
+- Corrected the behavior of the `animationDirection` prop:
+  - The default direction is now `"rtl"` to match the actual animation behavior.
+  - Setting `"ltr"` now properly reverses the animation (left-to-right), instead of unintentionally flipping it.

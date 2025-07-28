@@ -56,7 +56,7 @@ function App() {
     <Carousel
       itemType="text"
       text="Your scrolling text here"
-      animationDirection="rtl"
+      animationDirection="ltr"
       hoverSpeedFactor={0.5}
     />
   );
@@ -92,17 +92,16 @@ function App() {
 
 These props are available for both image and text carousels:
 
-| Prop                 | Type                                                 | Default     | Description                                                                                                               |
-| -------------------- | ---------------------------------------------------- | ----------- | ------------------------------------------------------------------------------------------------------------------------- |
-| `itemType`           | `"images" \| "text"`                                 | Required    | Specifies whether the carousel displays images or text                                                                    |
-| `className`          | `string`                                             | `undefined` | Additional CSS class for styling carousel items                                                                           |
-| `numOfCopies`        | `number`                                             | `2`         | Base number of copies to display. The actual number of clones will be doubled (e.g., if set to 3, total clones will be 6) |
-| `durationPerClone`   | `number`                                             | `10`        | Used for controlling animation speed. Accepts duration in seconds for each clone to complete its animation cycle. Ensures consistent speed across different screen sizes  |
-| `animationDuration`  | `number`                                             | `undefined`        | **Deprecated** (will be removed in v3.0.0). Use `durationPerClone` instead for consistent animation speed                 |
-| `animationDirection` | `"ltr" \| "rtl"`                                     | `"ltr"`     | Direction of animation (left-to-right or right-to-left)                                                                   |
-| `hoverSpeedFactor`   | `number`                                             | `1`         | Speed multiplier on hover (0 = pause, <1 = slower, >1 = faster)                                                           |
-| `responsiveClones`   | `Array<{ breakpoint: number, numOfCopies: number }>` | `undefined` | Responsive configuration for different screen sizes. Note: The numOfCopies value is doubled for each breakpoint           |
-| `fade`               | `number`                                             | `undefined` | Width in pixels for the fade effect at the edges. Creates a gradient fade at both ends of the carousel                    |
+| Prop                 | Type                                                 | Default                                          | Description                                                                                                                                                                                                                    |
+| -------------------- | ---------------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `itemType`           | `"images" \| "text"`                                 | Required                                         | Specifies whether the carousel displays images or text                                                                                                                                                                         |
+| `durationPerClone`   | `number`                                             | `10`                                             | Time (in seconds) it takes one clone to travel the full carousel.The total loop duration is `durationPerClone × numberOfClones`, so the apparent speed remains constant even when the clone count changes with viewport width. |
+| `numOfCopies`        | `number`                                             | Automatically calculated based on the current viewport width. | Base number of copies to display. The actual number of clones will be doubled (e.g., if set to 3, total clones will be 6)                                                                                                      |
+| `responsiveClones`   | `Array<{ breakpoint: number, numOfCopies: number }>` | `undefined`                                      | Responsive configuration for different screen sizes. Note: The numOfCopies value is doubled for each breakpoint                                                                                                                |
+| `animationDirection` | `"ltr" \| "rtl"`                                     | `"rtl"`                                          | Direction of animation (left-to-right or right-to-left)                                                                                                                                                                        |
+| `className`          | `string`                                             | `undefined`                                      | Additional CSS class for styling carousel items                                                                                                                                                                                |
+| `hoverSpeedFactor`   | `number`                                             | `1`                                              | Speed multiplier on hover (0 = pause, <1 = slower, >1 = faster)                                                                                                                                                                |
+| `fade`               | `number`                                             | `undefined`                                      | Width in pixels for the fade effect at the edges. Creates a gradient fade at both ends of the carousel                                                                                                                         |
 
 ### Image Carousel Props
 
