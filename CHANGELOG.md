@@ -64,3 +64,9 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 - Corrected the behavior of the `animationDirection` prop:
   - The default direction is now `"rtl"` to match the actual animation behavior.
   - Setting `"ltr"` now properly reverses the animation (left-to-right), instead of unintentionally flipping it.
+
+## [3.0.1] - 2025-07-28
+
+### Fixed
+
+- Corrected the main entry in package.json from "dist/index.js" to "dist/index.umd.js". The previous value pointed to a non-existent file, which did not affect development but caused issues during build in consuming projects.
